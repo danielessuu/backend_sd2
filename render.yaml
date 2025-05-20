@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: santodomingo-api
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn santodomingo_api.wsgi --log-file -
+    envVars:
+      - key: DATABASE_URL
+        sync: false
+      - key: DEBUG
+        value: "False"
+    preDeployCommand: |
+      python manage.py migrate
+      python manage.py loaddata data.json
